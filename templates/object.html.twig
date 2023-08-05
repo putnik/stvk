@@ -1,0 +1,122 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    {{ object.ltName }}
+    {% if object.ltName != object.enName %}/ {{ object.enName }}{% endif %}
+    ({{ object.id }})
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/leaflet/1.9.4/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+    <style>
+        #map {
+            height: 300px;
+        }
+    </style>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/leaflet/1.9.4/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+    <script>
+        var map = L.map('map').setView([
+            {{ object.coordinates.longitude }},
+            {{ object.coordinates.latitude }}
+        ], {{ object.coordinates.zoom|round(0, 'ceil') }});
+
+        L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.svg?lang=lt', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        L.marker([{{ object.coordinates.longitude }}, {{ object.coordinates.latitude }}]).addTo(map);
+    </script>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-12 g-4">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="card-title" lang="lt">{{ object.kind.toEmoji() }} {{ object.ltName }}</h1>
+                    <p class="card-text lead" lang="en"><span class="badge text-bg-light">en</span> {{ object.enName }}</p>
+                </div>
+                <div class="card-body">
+                    <div class="row justify-content-around">
+                        <div class="col-sm-12 col-md-8 col-lg-9">
+                            {% if object.ltDescription %}<p class="card-text" lang="lt">{{ object.ltDescription }}</p>{% endif %}
+                            {% if object.enDescription %}<p class="card-text" lang="en"><span class="badge text-bg-light">en</span> {{ object.enDescription }}</p>{% endif %}
+                        </div>
+                        <div class="col-sm-12 col-md-3 col-lg-2 g-2 text-end">
+                            <a class="btn btn-secondary" href="{{ path('object.redirect', {id: id}) }}" role="button">STVK →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-8 g-4">
+            <div class="card">
+                <div class="card-body">
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-4 g-4">
+            <div class="card">
+                <div class="card-body">
+                    <table>
+                        <tbody>
+                        {% if object.height %}
+                            <tr>
+                                <th>Height</th>
+                                <td>{{ object.height|number_format(1, ',', ' ') }} m</td>
+                            </tr>
+                        {% endif %}
+                        {% if object.length %}
+                            <tr>
+                                <th>Length</th>
+                                <td>{{ object.length|number_format(1, ',', ' ') }} m</td>
+                            </tr>
+                        {% endif %}
+                        {% if object.perimeter %}
+                            <tr>
+                                <th>Perimeter</th>
+                                <td>{{ object.perimeter|number_format(1, ',', ' ') }} m</td>
+                            </tr>
+                        {% endif %}
+                        {% if object.area %}
+                        <tr>
+                            <th>Area</th>
+                            <td>{{ object.area|number_format(1, ',', ' ') }} m²</td>
+                        </tr>
+                        {% endif %}
+                        {% if object.volume %}
+                        <tr>
+                            <th>Volume</th>
+                            <td>{{ object.volume|number_format(1, ',', ' ') }} m³</td>
+                        </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for photo in photos %}
+            <div class="col-sm-12 col-md-6 col-lg-4 g-4">
+                <div class="card">
+                    <img src="{{ photo.url }}" class="card-img-top" alt="{{ photo.name }}">
+                    <div class="card-body">
+                        <p class="card-text">{{ photo.name }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
