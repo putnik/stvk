@@ -21,6 +21,9 @@ class NaturalObjectRepository
         $this->stvkClient = $stvkClient;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function getById(string $id): ?NaturalObject
     {
         $data = $this->stvkClient->getProtectedArea($id);
@@ -33,6 +36,7 @@ class NaturalObjectRepository
             NaturalObjectClass::from((int)$data['tipas']),
             NaturalObjectKind::from((string)$data['kind']),
             ProtectionLevel::from((string)$data['eng_reiksme']),
+            $data['steigejas'],
             Coordinates::createFromEPSG3857($data['x_min'], $data['x_max'], $data['y_min'], $data['y_max']),
             $data['pavadinimas'],
             $data['eng_pavadinimas'],
@@ -47,10 +51,13 @@ class NaturalObjectRepository
             $data['vieta'],
             $data['kult_paveld_kodas'] ?: null,
             (bool)$data['ar_gamt_paminkl'],
-            $data['steig_ta'],
             $data['steig_tikslas'],
-            $data['reg_data'] ? new \DateTimeImmutable('@' . $data['reg_data']) : null,
-            $data['kor_data'] ? new \DateTimeImmutable('@' . $data['kor_data']) : null
+            $data['steig_ta'],
+            $data['steig_ta_galiojantis'],
+            $this->getDate($data['steig_data']),
+            $this->getDate($data['steig_data_galiojantis']),
+            $this->getDate($data['reg_data']),
+            $this->getDate($data['kor_data'])
         );
     }
 
@@ -83,5 +90,19 @@ class NaturalObjectRepository
         }
 
         return $photos;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function getDate(?int $timestamp): ?\DateTimeImmutable
+    {
+        if ($timestamp === null) {
+            return null;
+        }
+
+        $timestamp /= 1000;
+
+        return new \DateTimeImmutable('@' . $timestamp);
     }
 }

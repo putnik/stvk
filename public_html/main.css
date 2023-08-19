@@ -1,0 +1,31 @@
+h1 {
+    font-size: 2em;
+}
+
+#map {
+    height: 35em;
+    overflow: hidden;
+}
+
+.card-header {
+    font-size: inherit;
+}
+
+.card-body:has(#map) {
+    padding: 0;
+}
+
+.card-body th {
+    width: 6em;
+}
+
+.card-body th,
+.card-body td {
+    vertical-align: top;
+    padding-bottom: .5em;
+}
+
+.card-body tr:last-child th,
+.card-body tr:last-child td {
+    padding-bottom: 0;
+}

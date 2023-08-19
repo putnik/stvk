@@ -10,6 +10,7 @@ class NaturalObject
     private NaturalObjectClass $class;
     private NaturalObjectKind $kind;
     private ProtectionLevel $protectionLevel;
+    private ?string $protectionLevelName;
     private Coordinates $coordinates;
     private string $ltName;
     private string $enName;
@@ -24,16 +25,20 @@ class NaturalObject
     private ?string $location;
     private ?int $cultureHeritageCode;
     private bool $isMonument;
-    private ?string $addedBy;
-    private ?string $addedByDocument;
-    private ?\DateTimeInterface $addedAt;
-    private ?\DateTimeInterface $validAt;
+    private ?string $institution;
+    private ?string $institutionUpdated;
+    private ?string $institutionObjective;
+    private ?\DateTimeInterface $institutionAddedAt;
+    private ?\DateTimeInterface $institutionUpdatedAt;
+    private ?\DateTimeInterface $cadastreAddedAt;
+    private ?\DateTimeInterface $cadastreUpdatedAt;
 
     public function __construct(
         string $id,
         NaturalObjectClass $class,
         NaturalObjectKind $kind,
         ProtectionLevel $protectionLevel,
+        ?string $protectionLevelName,
         Coordinates $coordinates,
         string $ltName,
         string $enName,
@@ -48,15 +53,19 @@ class NaturalObject
         ?string $location,
         ?int $cultureHeritageCode,
         bool $isMonument,
-        ?string $addedBy,
-        ?string $addedByDocument,
-        ?\DateTimeInterface $addedAt,
-        ?\DateTimeInterface $validAt
+        ?string $institutionObjective,
+        ?string $institution,
+        ?string $institutionUpdated,
+        ?\DateTimeInterface $institutionAddedAt,
+        ?\DateTimeInterface $institutionUpdatedAt,
+        ?\DateTimeInterface $cadastreAddedAt,
+        ?\DateTimeInterface $cadastreUpdatedAt
     ) {
         $this->id = $id;
         $this->class = $class;
         $this->kind = $kind;
         $this->protectionLevel = $protectionLevel;
+        $this->protectionLevelName = $protectionLevelName;
         $this->coordinates = $coordinates;
         $this->ltName = $ltName;
         $this->enName = $enName;
@@ -71,10 +80,13 @@ class NaturalObject
         $this->location = $location;
         $this->cultureHeritageCode = $cultureHeritageCode;
         $this->isMonument = $isMonument;
-        $this->addedBy = $addedBy;
-        $this->addedByDocument = $addedByDocument;
-        $this->addedAt = $addedAt;
-        $this->validAt = $validAt;
+        $this->institution = $institution;
+        $this->institutionUpdated = $institutionUpdated;
+        $this->institutionObjective = $institutionObjective;
+        $this->institutionAddedAt = $institutionAddedAt;
+        $this->institutionUpdatedAt = $institutionUpdatedAt;
+        $this->cadastreAddedAt = $cadastreAddedAt;
+        $this->cadastreUpdatedAt = $cadastreUpdatedAt;
     }
 
     public function getId(): string
@@ -95,6 +107,11 @@ class NaturalObject
     public function getProtectionLevel(): ProtectionLevel
     {
         return $this->protectionLevel;
+    }
+
+    public function getProtectionLevelName(): ?string
+    {
+        return $this->protectionLevelName;
     }
 
     public function getCoordinates(): Coordinates
@@ -167,23 +184,38 @@ class NaturalObject
         return $this->isMonument;
     }
 
-    public function getAddedBy(): ?string
+    public function getInstitution(): ?string
     {
-        return $this->addedBy;
+        return $this->institution;
     }
 
-    public function getAddedByDocument(): ?string
+    public function getInstitutionUpdated(): ?string
     {
-        return $this->addedByDocument;
+        return $this->institutionUpdated;
     }
 
-    public function getAddedAt(): ?\DateTimeInterface
+    public function getInstitutionObjective(): ?string
     {
-        return $this->addedAt;
+        return $this->institutionObjective;
     }
 
-    public function getValidAt(): ?\DateTimeInterface
+    public function getInstitutionAddedAt(): ?\DateTimeInterface
     {
-        return $this->validAt;
+        return $this->institutionAddedAt;
+    }
+
+    public function getInstitutionUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->institutionUpdatedAt;
+    }
+
+    public function getCadastreAddedAt(): ?\DateTimeInterface
+    {
+        return $this->cadastreAddedAt;
+    }
+
+    public function getCadastreUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->cadastreUpdatedAt;
     }
 }

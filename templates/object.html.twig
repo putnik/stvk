@@ -4,17 +4,13 @@
     {{ object.ltName }}
     {% if object.ltName != object.enName %}/ {{ object.enName }}{% endif %}
     ({{ object.id }})
+    - {{ parent() }}
 {% endblock %}
 
 {% block css %}
     <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/leaflet/1.9.4/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
           crossorigin=""/>
-    <style>
-        #map {
-            height: 300px;
-        }
-    </style>
 {% endblock %}
 
 {% block scripts %}
@@ -47,7 +43,9 @@
                     <div class="row justify-content-around">
                         <div class="col-sm-12 col-md-8 col-lg-9">
                             {% if object.ltDescription %}<p class="card-text" lang="lt">{{ object.ltDescription }}</p>{% endif %}
-                            {% if object.enDescription %}<p class="card-text" lang="en"><span class="badge text-bg-light">en</span> {{ object.enDescription }}</p>{% endif %}
+                            {% if object.enDescription and not object.enDescription|replace({ '???': '' }) == object.ltDescription %}
+                                <p class="card-text" lang="en"><span class="badge text-bg-light">en</span> {{ object.enDescription }}</p>
+                            {% endif %}
                         </div>
                         <div class="col-sm-12 col-md-3 col-lg-2 g-2 text-end">
                             <a class="btn btn-secondary" href="{{ path('object.redirect', {id: id}) }}" role="button">STVK →</a>
@@ -58,50 +56,117 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-12 col-md-6 col-lg-8 g-4">
+        <div class="col-sm-12 col-md-6 col-lg-6 g-4">
             <div class="card">
+                <h2 class="card-header">On map</h2>
                 <div class="card-body">
                     <div id="map"></div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-12 col-md-6 col-lg-4 g-4">
-            <div class="card">
-                <div class="card-body">
-                    <table>
-                        <tbody>
-                        {% if object.height %}
-                            <tr>
-                                <th>Height</th>
-                                <td>{{ object.height|number_format(1, ',', ' ') }} m</td>
-                            </tr>
-                        {% endif %}
-                        {% if object.length %}
-                            <tr>
-                                <th>Length</th>
-                                <td>{{ object.length|number_format(1, ',', ' ') }} m</td>
-                            </tr>
-                        {% endif %}
-                        {% if object.perimeter %}
-                            <tr>
-                                <th>Perimeter</th>
-                                <td>{{ object.perimeter|number_format(1, ',', ' ') }} m</td>
-                            </tr>
-                        {% endif %}
-                        {% if object.area %}
-                        <tr>
-                            <th>Area</th>
-                            <td>{{ object.area|number_format(1, ',', ' ') }} m²</td>
-                        </tr>
-                        {% endif %}
-                        {% if object.volume %}
-                        <tr>
-                            <th>Volume</th>
-                            <td>{{ object.volume|number_format(1, ',', ' ') }} m³</td>
-                        </tr>
-                        {% endif %}
-                        </tbody>
-                    </table>
+
+        <div class="col-sm-12 col-md-6 col-lg-6 g-4">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <h2 class="card-header">Measurements</h2>
+                        <div class="card-body">
+                            <table>
+                                <tbody>
+                                {% if object.height %}
+                                    <tr>
+                                        <th>Height</th>
+                                        <td>{{ object.height|number_format(1, ',', ' ') }} m</td>
+                                    </tr>
+                                {% endif %}
+                                {% if object.length %}
+                                    <tr>
+                                        <th>Length</th>
+                                        <td>{{ object.length|number_format(1, ',', ' ') }} m</td>
+                                    </tr>
+                                {% endif %}
+                                {% if object.perimeter %}
+                                    <tr>
+                                        <th>Perimeter</th>
+                                        <td>{{ object.perimeter|number_format(1, ',', ' ') }} m</td>
+                                    </tr>
+                                {% endif %}
+                                {% if object.area %}
+                                <tr>
+                                    <th>Area</th>
+                                    <td>{{ object.area|number_format(1, ',', ' ') }} m²</td>
+                                </tr>
+                                {% endif %}
+                                {% if object.volume %}
+                                <tr>
+                                    <th>Volume</th>
+                                    <td>{{ object.volume|number_format(1, ',', ' ') }} m³</td>
+                                </tr>
+                                {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 g-4">
+                    <div class="card">
+                        <h2 class="card-header">Protection status</h2>
+                        <div class="card-body">
+                            <table>
+                                <tbody>
+                                {% if object.protectionLevel %}
+                                    <tr>
+                                        <th>Level</th>
+                                        <td class="protection-level-{{ object.protectionLevel.name }}">
+                                            {{ object.protectionLevel.value }}<!--
+                                            -->{% if object.protectionLevel.name == 'Municipal' and object.protectionLevelName %}:
+                                                <span lang="lt">{{ object.protectionLevelName }}</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                                {% if object.institutionObjective %}
+                                    <tr>
+                                        <th>Objective</th>
+                                        <td lang="lt">{{ object.institutionObjective }}</td>
+                                    </tr>
+                                {% endif %}
+                                {% if object.institution %}
+                                    <tr>
+                                        <th>First institution</th>
+                                        <td lang="lt">
+                                            {{ object.institution }}
+                                            {% if object.institutionAddedAt %}
+                                                <small class="text-muted">({{ object.institutionAddedAt|date('Y-m-d') }})</small>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                                {% if object.institutionUpdated %}
+                                    <tr>
+                                        <th>Current institution</th>
+                                        <td lang="lt">
+                                            {{ object.institutionUpdated }}
+                                            {% if object.institutionUpdatedAt %}
+                                                <small class="text-muted">({{ object.institutionUpdatedAt|date('Y-m-d') }})</small>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <small class="card-footer text-muted">
+                            {% if object.cadastreAddedAt %}
+                                Added to cadastre: {{ object.cadastreAddedAt|date('Y-m-d') }}
+                            {% endif %}
+                            {% if object.cadastreUpdatedAt %}
+                                <br>Last update: {{ object.cadastreUpdatedAt|date('Y-m-d') }}
+                            {% endif %}
+                        </small>
+                  </div>
                 </div>
             </div>
         </div>
