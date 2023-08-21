@@ -47,9 +47,16 @@
                                 <p class="card-text" lang="en"><span class="badge text-bg-light">en</span> {{ object.enDescription }}</p>
                             {% endif %}
                         </div>
-                        <div class="col-sm-12 col-md-3 col-lg-2 g-2 text-end">
-                            <a class="btn btn-secondary" href="{{ path('object.redirect', {id: id}) }}" role="button">STVK →</a>
-                        </div>
+                        <ul class="nav justify-content-end">
+                            {% for name, url in links %}
+                                <li class="nav-item">
+                                    <a class="nav-link " href="{{ url }}" role="button">{{ name }}</a>
+                                </li>
+                            {% endfor %}
+                            <li class="nav-item">
+                                <a class="nav-link " href="{{ path('object.redirect', {id: id}) }}" role="button">STVK</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>

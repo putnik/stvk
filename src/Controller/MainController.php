@@ -28,11 +28,13 @@ class MainController extends AbstractController
         }
 
         $photos = $naturalObjectRepository->getPhotosById($id);
+        $links = $naturalObjectRepository->getLinksById($id);
 
         return $this->render('object.html.twig', [
             'id' => $id,
             'object' => $naturalObject,
             'photos' => $photos,
+            'links' => $links,
         ]);
     }
 

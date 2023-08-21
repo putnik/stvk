@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Client\SparqlClient;
 use App\Client\StvkClient;
 use App\Entity\Coordinates;
 use App\Entity\NaturalObject;
@@ -14,10 +15,15 @@ use App\Entity\ProtectionLevel;
 
 class NaturalObjectRepository
 {
+    private SparqlClient $sparqlClient;
     private StvkClient $stvkClient;
 
-    public function __construct(StvkClient $stvkClient)
+    public function __construct(
+        SparqlClient $sparqlClient,
+        StvkClient $stvkClient
+    )
     {
+        $this->sparqlClient = $sparqlClient;
         $this->stvkClient = $stvkClient;
     }
 
@@ -90,6 +96,36 @@ class NaturalObjectRepository
         }
 
         return $photos;
+    }
+
+    /**
+     * @param string $id
+     * @return array<string, string>
+     */
+    public function getLinksById(string $id): array
+    {
+        $query = 'SELECT ?KVR ?Commons ?Wikidata ?Wikipedia
+            WHERE {
+                VALUES ?id { "' . $id . '" }
+                ?item wdt:P11879 ?id .
+                BIND(REPLACE(STR(?item), "http://www.wikidata.org/entity/", "https://www.wikidata.org/wiki/") as ?Wikidata) 
+                OPTIONAL {
+                    ?item wdt:P10040 ?_KVR .
+                    BIND(CONCAT("https://kvr.kpd.lt/heritage/Pages/KVRDetail.aspx?lang=lt&MC=", ?_KVR) AS ?KVR)
+                }
+                OPTIONAL {
+                    ?item wdt:P373 ?_Commons .
+                    BIND(CONCAT("https://commons.wikimedia.org/wiki/Category:", REPLACE(?_Commons, " ", "_")) AS ?Commons)
+                }
+                OPTIONAL {
+                    ?article schema:about ?item .
+                    ?article schema:isPartOf <https://lt.wikipedia.org/> .
+                    BIND(STR(?article) AS ?Wikipedia)
+                }
+            }
+            LIMIT 1';
+
+        return $this->sparqlClient->getOne($query);
     }
 
     /**
