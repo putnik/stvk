@@ -13,7 +13,7 @@ class NaturalObject
     private ?string $protectionLevelName;
     private Coordinates $coordinates;
     private string $ltName;
-    private string $enName;
+    private ?string $enName;
     private ?string $ltDescription;
     private ?string $enDescription;
     private ?string $belongsTo;
@@ -41,7 +41,7 @@ class NaturalObject
         ?string $protectionLevelName,
         Coordinates $coordinates,
         string $ltName,
-        string $enName,
+        ?string $enName,
         ?string $ltDescription,
         ?string $enDescription,
         ?string $belongsTo,
@@ -124,7 +124,7 @@ class NaturalObject
         return $this->ltName;
     }
 
-    public function getEnName(): string
+    public function getEnName(): ?string
     {
         return $this->enName;
     }
