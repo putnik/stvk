@@ -9,7 +9,7 @@ class NaturalObject
     private string $id;
     private NaturalObjectClass $class;
     private NaturalObjectKind $kind;
-    private ProtectionLevel $protectionLevel;
+    private ?ProtectionLevel $protectionLevel;
     private ?string $protectionLevelName;
     private Coordinates $coordinates;
     private string $ltName;
@@ -37,7 +37,7 @@ class NaturalObject
         string $id,
         NaturalObjectClass $class,
         NaturalObjectKind $kind,
-        ProtectionLevel $protectionLevel,
+        ?ProtectionLevel $protectionLevel,
         ?string $protectionLevelName,
         Coordinates $coordinates,
         string $ltName,
@@ -104,7 +104,7 @@ class NaturalObject
         return $this->kind;
     }
 
-    public function getProtectionLevel(): ProtectionLevel
+    public function getProtectionLevel(): ?ProtectionLevel
     {
         return $this->protectionLevel;
     }

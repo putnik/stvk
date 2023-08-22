@@ -41,7 +41,7 @@ class NaturalObjectRepository
             $data['id'],
             NaturalObjectClass::from((int)$data['tipas']),
             NaturalObjectKind::from((string)$data['kind']),
-            ProtectionLevel::from((string)$data['eng_reiksme']),
+            $data['eng_reiksme'] ? ProtectionLevel::from($data['eng_reiksme']) : null,
             $data['steigejas'],
             Coordinates::createFromEPSG3857($data['x_min'], $data['x_max'], $data['y_min'], $data['y_max']),
             $data['pavadinimas'],

@@ -17,6 +17,8 @@ enum NaturalObjectKind: string
     case LandscapeReserve = 'dra';
     case StrictReserve = 'rez';
 
+    // Natura2000
+    case HabitatsDirectiveTerritory = 'bast';
 
     /** @var array<string, string> */
     private const EMOJIS = [
@@ -30,6 +32,8 @@ enum NaturalObjectKind: string
         self::Park->value => '🏞️',
         self::LandscapeReserve->value => '🏞️',
         self::StrictReserve->value => '🏞️',
+
+        self::HabitatsDirectiveTerritory->value => '🐾',
     ];
 
     /** @var array<string, int[]> */
@@ -44,6 +48,8 @@ enum NaturalObjectKind: string
         self::Park->value => [24, 38],
         self::LandscapeReserve->value => [48, 52],
         self::StrictReserve->value => [41],
+
+        self::HabitatsDirectiveTerritory->value => [1],
     ];
 
     public function toEmoji(): string
