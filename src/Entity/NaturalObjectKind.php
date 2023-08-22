@@ -13,6 +13,7 @@ enum NaturalObjectKind: string
     case HydrographicalObject = 'gpo_hgr';
     case ZoologicalObject = 'gpo_zoo';
 
+    case Park = 'par';
     case LandscapeReserve = 'dra';
     case StrictReserve = 'rez';
 
@@ -26,6 +27,7 @@ enum NaturalObjectKind: string
         self::HydrographicalObject->value => '🌊',
         self::ZoologicalObject->value => '🐾',
 
+        self::Park->value => '🏞️',
         self::LandscapeReserve->value => '🏞️',
         self::StrictReserve->value => '🏞️',
     ];
@@ -39,6 +41,7 @@ enum NaturalObjectKind: string
         self::HydrographicalObject->value => [45],
         self::ZoologicalObject->value => [47],
 
+        self::Park->value => [24, 38],
         self::LandscapeReserve->value => [48, 52],
         self::StrictReserve->value => [41],
     ];
