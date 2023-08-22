@@ -47,7 +47,7 @@ class MainController extends AbstractController
         }
 
         $url = sprintf(
-            'https://stvk.lt/map/%0.4f/%0.4f/%0.1f/[%d]',
+            'https://stvk.lt/map/%0.4f/%0.4f/%0.1f/[%s]',
             $naturalObject->getCoordinates()->getLatitude(),
             $naturalObject->getCoordinates()->getLongitude(),
             $naturalObject->getCoordinates()->getZoom(),
