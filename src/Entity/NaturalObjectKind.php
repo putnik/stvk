@@ -16,6 +16,7 @@ enum NaturalObjectKind: string
     case Park = 'par';
     case LandscapeReserve = 'dra';
     case StrictReserve = 'rez';
+    case FunctionalPriorityZone = 'fpz';
 
     // Natura2000
     case BirdsProtectionArea = 'past';
@@ -33,6 +34,7 @@ enum NaturalObjectKind: string
         self::Park->value => '🏞️',
         self::LandscapeReserve->value => '🏞️',
         self::StrictReserve->value => '🏞️',
+        self::FunctionalPriorityZone->value => '🪧',
 
         self::BirdsProtectionArea->value => '🦆',
         self::HabitatsProtectionArea->value => '🐾',
@@ -50,6 +52,7 @@ enum NaturalObjectKind: string
         self::Park->value => [24, 38],
         self::LandscapeReserve->value => [48, 52],
         self::StrictReserve->value => [41],
+        self::FunctionalPriorityZone->value => [16, 17, 18, 19, 20, 21, 22, 23, 25, 26, 29, 30, 31, 32, 33, 34, 35, 36, 37, 39, 40],
 
         self::BirdsProtectionArea->value => [28],
         self::HabitatsProtectionArea->value => [1],
